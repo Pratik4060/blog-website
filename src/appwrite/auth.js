@@ -3,7 +3,7 @@ import conf from "../conf/conf";
 
 import { Client, Account, ID } from "appwrite";
 
-export class AuhtService {
+export class AuthService {
   client = new Client();
   account;
 
@@ -38,7 +38,7 @@ export class AuhtService {
   }
   async getCurrentUser() {
     try {
-      await this.account.get();
+      return await this.account.get();
     } catch (error) {
       console.log("Appwrite Service :: getCurrentUser:: error", error);
     }
@@ -52,6 +52,6 @@ export class AuhtService {
     }
   }
 }
-const auhtService = new AuhtService();
+const authService = new AuthService();
 
-export default auhtService;
+export default authService;
