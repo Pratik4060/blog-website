@@ -34,17 +34,24 @@ export class AuthService {
   async login({ email, password }) {
     try {
       return await this.account.createEmailPasswordSession(email, password);
-    } catch (error) {}
-  }
-  async getCurrentUser() {
-    try {
-      return await this.account.get();
     } catch (error) {
-      console.log("Appwrite Service :: getCurrentUser:: error", error);
+      throw(error)
+    }
+  }
+ async getCurrentUser() {
+  try {
+    return await this.account.get();
+  } catch (error) {
+    if (error.code === 401) {
+      console.warn("No active session: user is not logged in");
+    } else {
+      console.error("Appwrite Service :: getCurrentUser:: error", error);
     }
     return null;
   }
-  async logOut() {
+}
+
+  async logout() {
     try {
       await this.account.deleteSessions("all");
     } catch (error) {

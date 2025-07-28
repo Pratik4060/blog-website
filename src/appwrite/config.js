@@ -20,32 +20,35 @@ export class Service{
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug,
-                {
-                    title,
-                    content,
-                    featuredImage,
-                    status,
-                    userId,
-                }
+               {
+   title,          // ✅ use lowercase key
+                     content, // ✅ Capital "C" as expected
+
+                featuredImage,
+                status,
+                userId,
+}
+
             )
         } catch (error) {
             console.log("Appwrite serive :: createPost :: error", error);
         }
     }
 
-    async updatePost(slug, {title, content, featuredImage, status}){
+    async updatePost(slug, {title, content, featuredImage, status,userId}){
         try {
             return await this.databases.updateDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
                 slug,
-                {
-                    title,
-                    content,
-                    featuredImage,
-                    status,
+{
+    title,          // ✅ use lowercase key
+                content,        // ✅ use lowercase key
+                featuredImage,
+                status,
+                userId,
+}
 
-                }
             )
         } catch (error) {
             console.log("Appwrite serive :: updatePost :: error", error);
@@ -103,7 +106,10 @@ export class Service{
             return await this.bucket.createFile(
                 conf.appwriteBucketId,
                 ID.unique(),
-                file
+                file,
+                 [
+        Permission.read(Role.any())  // 👈 Public Read Permission
+      ]
             )
         } catch (error) {
             console.log("Appwrite serive :: uploadFile :: error", error);
@@ -124,12 +130,14 @@ export class Service{
         }
     }
 
-    getFilePreview(fileId){
-        return this.bucket.getFilePreview(
-            conf.appwriteBucketId,
-            fileId
-        )
-    }
+getFilePreview(fileId) {
+  return this.bucket.getFileView(
+    conf.appwriteBucketId,
+    fileId
+  );
+}
+
+
 }
 
 
